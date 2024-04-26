@@ -1,0 +1,14 @@
+{
+  "Rom File": "roms/Frogger (USA).a26",
+  "Expected ROM SHA1": "E859B935A36494F3C4B4BF5547392600FB9C96F0",
+  "Initial State File": "",
+  "Disable State Blocks": [ ],
+  "Controller 1 Type": "Gamepad",
+  "Controller 2 Type": "None",
+  "Differential Compression":
+  {
+    "Enabled": false,
+    "Max Differences": 2200,
+    "Use Zlib": true
+  }
+}

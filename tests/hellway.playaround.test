@@ -1,0 +1,14 @@
+{
+  "Rom File": "roms/hellway.a26",
+  "Expected ROM SHA1": "8C209A10CCF24194CB888D5E750CF303AD050EF7",
+  "Initial State File": "",
+  "Disable State Blocks": [ ],
+  "Controller 1 Type": "Gamepad",
+  "Controller 2 Type": "None",
+  "Differential Compression":
+  {
+    "Enabled": false,
+    "Max Differences": 2200,
+    "Use Zlib": true
+  }
+}
