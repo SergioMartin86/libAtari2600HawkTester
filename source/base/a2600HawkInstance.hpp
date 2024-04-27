@@ -135,7 +135,7 @@ class EmuInstance : public EmuInstanceBase
     Atari2600Hawk_GetVideoBuffer(_a2600, (uint32_t*)pixels);
     SDL_UnlockTexture(m_tex);
 
-    const SDL_Rect BLIT_RECT = {0, 0, _videoBufferWeight, _videoBufferHeight};
+    const SDL_Rect BLIT_RECT = {0, 0, (int)_videoBufferWeight, (int)_videoBufferHeight};
     // render to screen
     SDL_RenderClear(m_renderer);
     SDL_RenderCopy(m_renderer, m_tex, &BLIT_RECT, &BLIT_RECT);
