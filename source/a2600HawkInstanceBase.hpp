@@ -58,10 +58,8 @@ class EmuInstanceBase
   {
     MetroHash128 hash;
     
-    auto workRam = getWorkRamPointer();
-
     //  Getting RAM pointer and size
-    hash.Update(workRam, 128);
+    for (size_t i = 0; i < 128; i++) hash.Update(getWorkRamByte(i));
 
     jaffarCommon::hash::hash_t result;
     hash.Finalize(reinterpret_cast<uint8_t *>(&result));
@@ -110,7 +108,6 @@ class EmuInstanceBase
 
   // Virtual functions
 
-  virtual uint8_t* getWorkRamPointer() const = 0;
   virtual void updateRenderer() = 0;
   virtual void serializeState(jaffarCommon::serializer::Base& s) const = 0;
   virtual void deserializeState(jaffarCommon::deserializer::Base& d) = 0;
@@ -121,6 +118,7 @@ class EmuInstanceBase
 
   protected:
 
+  virtual uint8_t getWorkRamByte(size_t pos) const = 0;
   virtual bool loadROMImpl(const std::string &romData) = 0;
   virtual void advanceStateImpl(const libA2600Hawk::Controller controller) = 0;
 
