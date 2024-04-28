@@ -70,6 +70,8 @@ class EmuInstance : public EmuInstanceBase
 
    _videoBufferHeight = Atari2600Hawk_GetBufferHeight(_a2600);
    _videoBufferWeight = Atari2600Hawk_GetBufferWidth(_a2600);
+   _videoBufferSize = _videoBufferHeight * _videoBufferWeight * sizeof(uint32_t);
+   _videoBuffer = malloc(_videoBufferSize);
 
     // We can only call SDL_InitSubSystem once
     if (!SDL_WasInit(SDL_INIT_VIDEO))
@@ -90,6 +92,7 @@ class EmuInstance : public EmuInstanceBase
     if (m_tex) SDL_DestroyTexture(m_tex);
     if (m_renderer) SDL_DestroyRenderer(m_renderer);
     if (m_window) SDL_DestroyWindow(m_window);
+    free(_videoBuffer);
   }
 
   void enableRendering() override
@@ -127,16 +130,14 @@ class EmuInstance : public EmuInstanceBase
 
   void updateRenderer() override
   {
-    void* pixels;
     int pitch = 0;
+    void* pixels;
 
     if (SDL_LockTexture(m_tex, nullptr, &pixels, &pitch) < 0) JAFFAR_THROW_RUNTIME("Coult not lock texture");
-
-    Atari2600Hawk_GetVideoBuffer(_a2600, (uint32_t*)pixels);
+    memcpy(pixels, _videoBuffer, _videoBufferSize);
     SDL_UnlockTexture(m_tex);
 
     const SDL_Rect BLIT_RECT = {0, 0, (int)_videoBufferWeight, (int)_videoBufferHeight};
-    // render to screen
     SDL_RenderClear(m_renderer);
     SDL_RenderCopy(m_renderer, m_tex, &BLIT_RECT, &BLIT_RECT);
     SDL_RenderPresent(m_renderer);
@@ -162,6 +163,9 @@ class EmuInstance : public EmuInstanceBase
   {
   }
 
+  void* getVideoBuffer() const { return _videoBuffer; }
+  size_t getVideoBufferSize() const { return _videoBufferSize; }
+
   std::string getCoreName() const override { return "libA2600Hawk"; }
 
 
@@ -179,6 +183,7 @@ class EmuInstance : public EmuInstanceBase
 
     Atari2600Controller_SetInputs(_hawkController, &hawkInputs);
     Atari2600Hawk_FrameAdvance(_a2600, _hawkController, _doRendering, false);
+    if (_doRendering)  Atari2600Hawk_GetVideoBuffer(_a2600, (uint32_t*)_videoBuffer);
   }
 
   private:
@@ -196,10 +201,13 @@ class EmuInstance : public EmuInstanceBase
   struct Atari2600SyncSettings _syncSettings;
   struct Atari2600Controller* _hawkController;
   struct Atari2600MemoryDomain* _ramDomain;
+  
   Atari2600Hawk* _a2600;
 
   uint32_t _videoBufferHeight;
   uint32_t _videoBufferWeight;
+  void* _videoBuffer;
+  size_t _videoBufferSize;
 
   bool _doRendering = false;
 };
