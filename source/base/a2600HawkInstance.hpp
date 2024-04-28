@@ -44,7 +44,7 @@ class EmuInstance : public EmuInstanceBase
 	_settings.BackgroundColor = 0x000000; 
 
 	_syncSettings.Port1 = Atari2600ControllerTypes::Joystick;
-	_syncSettings.Port2 = Atari2600ControllerTypes::Joystick;
+	_syncSettings.Port2 = Atari2600ControllerTypes::Unplugged;
 	_syncSettings.BW = false;
 	_syncSettings.LeftDifficulty = true;
 	_syncSettings.RightDifficulty = true;

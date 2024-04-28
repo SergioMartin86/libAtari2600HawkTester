@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <string>
 #include <sstream>
+#include "Atari2600Controller.h"
 
 namespace libA2600Hawk
 {
@@ -83,23 +84,23 @@ public:
 
     c = ss.get();
     if (c != '.' && c != 'U') return false;
-    if (c == 'U') code |= 0b00000001;
+    if (c == 'U') code |= Atari2600PortButtons::Up;
 
     c = ss.get();
     if (c != '.' && c != 'D') return false;
-    if (c == 'D') code |= 0b00000010;
+    if (c == 'D') code |= Atari2600PortButtons::Down;
 
     c = ss.get();
     if (c != '.' && c != 'L') return false;
-    if (c == 'L') code |= 0b00000100;
+    if (c == 'L') code |= Atari2600PortButtons::Left;
 
     c = ss.get();
     if (c != '.' && c != 'R') return false;
-    if (c == 'R') code |= 0b00001000;
+    if (c == 'R') code |= Atari2600PortButtons::Right;
 
     c = ss.get();
     if (c != '.' && c != 'B') return false;
-    if (c == 'B') code |= 0b00100000;
+    if (c == 'B') code |=Atari2600PortButtons::Button; 
 
     return true;
   }

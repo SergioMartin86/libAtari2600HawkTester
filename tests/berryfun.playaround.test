@@ -1,0 +1,14 @@
+{
+  "Rom File": "roms/BerryFun![V1.0][NTSC].bin",
+  "Expected ROM SHA1": "EED2FBA1C87FF6974B8F7D1A1978B3FDE6FBC438",
+  "Initial State File": "",
+  "Disable State Blocks": [ ],
+  "Controller 1 Type": "Gamepad",
+  "Controller 2 Type": "None",
+  "Differential Compression":
+  {
+    "Enabled": false,
+    "Max Differences": 2200,
+    "Use Zlib": true
+  }
+}

@@ -7,7 +7,7 @@
 #include <jaffarCommon/deserializers/base.hpp>
 #include <jaffarCommon/serializers/contiguous.hpp>
 #include <jaffarCommon/deserializers/contiguous.hpp>
-
+#include "Atari2600Controller.h"
 #include "controller.hpp"
 
 namespace libA2600Hawk
