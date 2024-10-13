@@ -10,6 +10,7 @@ baseLibA2600HawkSrc =  [
 
 baseLibA2600HawkIncludeDirs = [
  '.',
+ '..',
  'core/output/linux-x64/publish/include/'
 ]
 

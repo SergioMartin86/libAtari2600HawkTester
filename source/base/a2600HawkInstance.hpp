@@ -19,10 +19,10 @@ class EmuInstance : public EmuInstanceBase
 {
  public:
 
- EmuInstance() : EmuInstanceBase()
+  EmuInstance(const nlohmann::json &config) : EmuInstanceBase(config)
  {
  }
-
+ 
  ~EmuInstance()
  {
  }
@@ -169,16 +169,16 @@ class EmuInstance : public EmuInstanceBase
   std::string getCoreName() const override { return "libA2600Hawk"; }
 
 
-  void advanceStateImpl(libA2600Hawk::Controller controller) override
+  void advanceStateImpl(const jaffar::input_t &input) override
   {
     Atari2600Inputs hawkInputs;
-    hawkInputs.P1Buttons = (Atari2600PortButtons)controller.getController1Code();
+    hawkInputs.P1Buttons = (Atari2600PortButtons)input.port1;
     uint32_t consoleButtons = 0;
-    if (controller.getPowerButtonState())     consoleButtons |= Atari2600ConsoleButtons::Power;
-    if (controller.getResetButtonState())     consoleButtons |= Atari2600ConsoleButtons::Reset;
-    if (controller.getSelectButtonState())    consoleButtons |= Atari2600ConsoleButtons::Select;
-    if (controller.getLeftDifficultyState())  consoleButtons |= Atari2600ConsoleButtons::ToggleLeftDifficulty;
-    if (controller.getRightDifficultyState()) consoleButtons |= Atari2600ConsoleButtons::ToggleRightDifficulty;
+    if (input.power)     consoleButtons |= Atari2600ConsoleButtons::Power;
+    if (input.reset)     consoleButtons |= Atari2600ConsoleButtons::Reset;
+    if (input.select)    consoleButtons |= Atari2600ConsoleButtons::Select;
+    if (input.leftDifficulty)  consoleButtons |= Atari2600ConsoleButtons::ToggleLeftDifficulty;
+    if (input.rightDifficulty) consoleButtons |= Atari2600ConsoleButtons::ToggleRightDifficulty;
     hawkInputs.ConsoleButtons = (Atari2600ConsoleButtons)consoleButtons;
 
     Atari2600Controller_SetInputs(_hawkController, &hawkInputs);

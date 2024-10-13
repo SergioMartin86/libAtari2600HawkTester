@@ -22,6 +22,10 @@ class PlaybackInstance
   PlaybackInstance(libA2600Hawk::EmuInstance *emu, const std::vector<std::string> &sequence, const std::string& cycleType) :
    _emu(emu)
   {
+    
+    // Getting input parser from the emulator
+    const auto inputParser = emu->getInputParser();
+
     // Getting full state size
     _fullStateSize = _emu->getStateSize();  
 
@@ -34,6 +38,7 @@ class PlaybackInstance
       // Adding new step
       stepData_t step;
       step.input = sequence[i];
+      auto stepIdx = inputParser->parseInputString(step.input);
 
       // Serializing state
       jaffarCommon::serializer::Contiguous s(stateData, _fullStateSize);
@@ -50,15 +55,15 @@ class PlaybackInstance
       // We advance depending on cycle type
       if (cycleType == "Simple")
       {
-        _emu->advanceState(step.input);
+        _emu->advanceState(stepIdx);
       }
 
       if (cycleType == "Rerecord")
       {
-        _emu->advanceState(step.input);
+        _emu->advanceState(stepIdx);
         jaffarCommon::deserializer::Contiguous d(stateData, _fullStateSize);
         _emu->deserializeState(d);
-        _emu->advanceState(step.input);
+        _emu->advanceState(stepIdx);
       }
     }
 
@@ -92,7 +97,7 @@ class PlaybackInstance
      _emu->deserializeState(d);
     }
 
-    _emu->advanceState("|.....|.....|");
+    _emu->advanceState(jaffar::input_t());
     
     {
      jaffarCommon::deserializer::Contiguous d(stateData, _fullStateSize);
